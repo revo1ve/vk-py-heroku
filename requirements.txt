@@ -1,1 +1,2 @@
-discord.py
+vk_api.py
+requests.py
