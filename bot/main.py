@@ -18,4 +18,4 @@ for event in longpoll.listen():
             msg = event.text.lower()
             id = event.user_id
             if msg == 'hi':
-                send_msg(id, 'Илья гей')
+                send_msg(id, 'Здарова карта')
