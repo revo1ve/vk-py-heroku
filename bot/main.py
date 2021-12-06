@@ -4,18 +4,18 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 
 import pandas as pd
 
-vk_session = vk_api.VkApi(token='5bbb7bd839fd3701a02c3c113ab04e724a5e002654afd4953c0d90ba1f8fa93c26a108f09266e15204214')
+vk_session = vk_api.VkApi(token='42853ead70045753424554372fd10d60942801fbcace3a0128e4b6d8d6df56cbf89922db63b3d19af179c')
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
 
 url = None
 
+help_str = '''rc - количество регистраций на меро /n
+              cu [url] - изменить url таблицы регистраций'''
+
 def change_url(new_url):
     global url
     url = new_url.replace('/edit#gid=', '/export?format=csv&gid=')
-
-help_str = '''rc - количество регистраций на меро /n
-              cu [url] - изменить url таблицы регистраций'''
 
 def send_msg(id, msg):
     vk_session.method('messages.send', {'user_id': id, 'message': msg, 'random_id': 0})
