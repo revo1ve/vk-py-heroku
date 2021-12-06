@@ -3,8 +3,10 @@ import requests
 from vk_api.longpoll import VkLongPoll, VkEventType
 
 import pandas as pd
-
 import configparser
+import pathlib
+
+current_directory = str(pathlib.Path(__file__).parent.resolve())
 
 vk_session = vk_api.VkApi(token='42853ead70045753424554372fd10d60942801fbcace3a0128e4b6d8d6df56cbf89922db63b3d19af179c')
 session_api = vk_session.get_api()
@@ -16,12 +18,12 @@ help_str = '''rc - количество регистраций на меро
 def change_url(new_url):
     new_config = configparser.ConfigParser()
     new_config['Forms'] = {'url': new_url.replace('/edit#gid=', '/export?format=csv&gid=')}
-    with open('config.ini', 'w') as cfgfile:
+    with open(current_directory + '/config.ini', 'w') as cfgfile:
       new_config.write(cfgfile)
 
 def get_url():
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read(current_directory + 'config.ini')
     return config['Forms']['url']
 
 def send_msg(id, msg):
@@ -45,7 +47,7 @@ for event in longpoll.listen():
                     try:
                       df = pd.read_csv(url)
                     except FileNotFoundError:
-                      send_msg(id, 'Файл не найден')
+                      send_msg(id, 'Ошибка: Файл не найден')
                     else:
                       rc = len(df)
                       send_msg(id, f'На меро зарегалось {rc} человек')
