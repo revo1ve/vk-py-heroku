@@ -41,9 +41,13 @@ for event in longpoll.listen():
                 if url == '':
                     send_msg(id, 'Ошибка: url не задан')
                 else:
-                    df = pd.read_csv(url)
-                    rc = len(df)
-                    send_msg(id, f'На меро зарегалось {rc} человек')
+                    try:
+                      df = pd.read_csv(url)
+                    except FileNotFoundError:
+                      send_msg(id, 'Файл не найден')
+                    else:
+                      rc = len(df)
+                      send_msg(id, f'На меро зарегалось {rc} человек')
             split_msg = msg.split()
             if split_msg[0] == 'cu':
                 if len(split_msg) == 2:
