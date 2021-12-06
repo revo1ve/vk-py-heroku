@@ -13,6 +13,7 @@ session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
 
 help_str = '''rc - количество регистраций на меро
+              gu - текущий url таблицы регистраций
               cu [url] - изменить url таблицы регистраций'''
 
 def change_url(new_url):
