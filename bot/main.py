@@ -17,7 +17,7 @@ help_str = '''rc - количество регистраций на меро
 
 def change_url(new_url):
     new_config = configparser.ConfigParser()
-    new_config['Forms'] = {'url': new_url.replace('/edit?resourcekey#gid=', '/export?format=csv&gid=')}
+    new_config['Forms'] = {'url': new_url}
     with open(current_directory + '/config.ini', 'w') as cfgfile:
       new_config.write(cfgfile)
 
@@ -44,7 +44,7 @@ for event in longpoll.listen():
                     send_msg(id, 'Ошибка: url не задан')
                 else:
                     try:
-                      df = pd.read_csv(url)
+                      df = pd.read_csv(url.replace('/edit?resourcekey#gid=', '/export?format=csv&gid='))
                       rc = len(df)
                       send_msg(id, f'На меро зарегалось {rc} человек')
                     except Exception as e:
