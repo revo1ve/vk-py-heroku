@@ -4,18 +4,25 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 
 import pandas as pd
 
+import configparser
+
 vk_session = vk_api.VkApi(token='42853ead70045753424554372fd10d60942801fbcace3a0128e4b6d8d6df56cbf89922db63b3d19af179c')
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
-
-url = None
 
 help_str = '''rc - количество регистраций на меро
               cu [url] - изменить url таблицы регистраций'''
 
 def change_url(new_url):
-    global url
-    url = new_url.replace('/edit#gid=', '/export?format=csv&gid=')
+    new_config = configparser.ConfigParser()
+    new_config['Forms'] = {'url': new_url.replace('/edit#gid=', '/export?format=csv&gid=')}
+    with open('./config.ini', 'w') as cfgfile:
+      new_config.write(cfgfile)
+
+def get_url():
+    config = configparser.ConfigParser()
+    config.read('./config.ini')
+    return config['Forms']['url']
 
 def send_msg(id, msg):
     vk_session.method('messages.send', {'user_id': id, 'message': msg, 'random_id': 0})
@@ -30,7 +37,8 @@ for event in longpoll.listen():
             if msg == 'help':
                 send_msg(id, help_str)
             if msg == 'rc':
-                if url == None:
+                url = get_url()
+                if url == '':
                     send_msg(id, 'Ошибка: url не задан')
                 else:
                     df = pd.read_csv(url)
