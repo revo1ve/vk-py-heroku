@@ -54,6 +54,6 @@ for event in longpoll.listen():
             if split_msg[0] == 'cu':
                 if len(split_msg) == 2:
                     change_url(split_msg[1])
-                    send_msg(id, f'Новый url: {url}')
+                    send_msg(id, f'Новый url: {get_url()}')
                 else:
                     send_msg(id, 'Ошибка: неверный формат команды, верный формат - cu [url]')
