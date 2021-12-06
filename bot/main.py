@@ -10,7 +10,7 @@ longpoll = VkLongPoll(vk_session)
 
 url = None
 
-help_str = '''rc - количество регистраций на меро /n
+help_str = '''rc - количество регистраций на меро
               cu [url] - изменить url таблицы регистраций'''
 
 def change_url(new_url):
