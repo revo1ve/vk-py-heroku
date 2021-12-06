@@ -39,8 +39,8 @@ for event in longpoll.listen():
             if msg == 'help':
                 send_msg(id, help_str)
             if msg == 'rc':
+                send_msg(id, current_directory)
                 url = get_url()
-                send_msg(id, url)
                 if url == '':
                     send_msg(id, 'Ошибка: url не задан')
                 else:
