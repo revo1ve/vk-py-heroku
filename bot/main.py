@@ -23,7 +23,7 @@ def change_url(new_url):
 
 def get_url():
     config = configparser.ConfigParser()
-    config.read(current_directory + 'config.ini')
+    config.read(current_directory + '/config.ini')
     return config['Forms']['url']
 
 def send_msg(id, msg):
