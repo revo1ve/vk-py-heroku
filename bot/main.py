@@ -9,6 +9,10 @@ longpoll = VkLongPoll(vk_session)
 #Lslongpoll = VkLongPoll(vk_session)
 #Lsvk = vk_session.get_api()
 
+sheet_url = 'https://docs.google.com/spreadsheets/d/11hUo2QLmWHdNsMI8lxxvlomE0HNztg_eos4lwMht2uM/edit#gid=2070277591'
+url = sheet_url.replace('/edit#gid=', '/export?format=csv&gid=')
+df = pd.read_csv(url)
+
 def send_msg(id, msg):
     vk_session.method('messages.send', {'user_id': id, 'message': msg, 'random_id': 0})
 
@@ -19,3 +23,6 @@ for event in longpoll.listen():
             id = event.user_id
             if msg == 'hi':
                 send_msg(id, 'Здарова карта')
+            if msg == 'rc':
+                rc = len(df) - 4
+                send_msg(id, f'На меро зарегалось {rc} человек')
