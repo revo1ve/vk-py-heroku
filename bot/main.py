@@ -50,6 +50,8 @@ for event in longpoll.listen():
                     else:
                       rc = len(df)
                       send_msg(id, f'На меро зарегалось {rc} человек')
+            if msg == 'gu':
+                send_msg(id, f'Текущий url: {get_url()}')
             split_msg = msg.split()
             if split_msg[0] == 'cu':
                 if len(split_msg) == 2:
