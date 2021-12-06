@@ -45,11 +45,10 @@ for event in longpoll.listen():
                 else:
                     try:
                       df = pd.read_csv(url)
+                      rc = len(df)
+                      send_msg(id, f'На меро зарегалось {rc} человек')
                     except FileNotFoundError:
                       send_msg(id, 'Ошибка: Файл не найден')
-                      continue
-                    rc = len(df)
-                    send_msg(id, f'На меро зарегалось {rc} человек')
             if msg == 'gu':
                 send_msg(id, f'Текущий url: {get_url()}')
             split_msg = msg.split()
