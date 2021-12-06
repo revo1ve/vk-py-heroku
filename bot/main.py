@@ -16,12 +16,12 @@ help_str = '''rc - количество регистраций на меро
 def change_url(new_url):
     new_config = configparser.ConfigParser()
     new_config['Forms'] = {'url': new_url.replace('/edit#gid=', '/export?format=csv&gid=')}
-    with open('./config.ini', 'w') as cfgfile:
+    with open('config.ini', 'w') as cfgfile:
       new_config.write(cfgfile)
 
 def get_url():
     config = configparser.ConfigParser()
-    config.read('./config.ini')
+    config.read('config.ini')
     return config['Forms']['url']
 
 def send_msg(id, msg):
@@ -32,7 +32,7 @@ for event in longpoll.listen():
         if event.to_me:
             msg = event.text.lower()
             id = event.user_id
-            if msg in ['Привет', 'Ку', 'Здарова', 'Прив']:
+            if msg in ['привет', 'ку', 'здарова', 'прив']:
                 send_msg(id, 'Здарова карта 😎')
             if msg == 'help':
                 send_msg(id, help_str)
@@ -45,7 +45,7 @@ for event in longpoll.listen():
                     rc = len(df)
                     send_msg(id, f'На меро зарегалось {rc} человек')
             split_msg = msg.split()
-            if msg.split()[0] == 'cu':
+            if split_msg[0] == 'cu':
                 if len(split_msg) == 2:
                     change_url(split_msg[1])
                     send_msg(id, f'Новый url: {url}')
