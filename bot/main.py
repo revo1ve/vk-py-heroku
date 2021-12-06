@@ -33,12 +33,13 @@ for event in longpoll.listen():
     if event.type == VkEventType.MESSAGE_NEW:
         if event.to_me:
             msg = event.text.lower()
+            split_msg = event.text.split()
             id = event.user_id
             if msg in ['привет', 'ку', 'здарова', 'прив']:
                 send_msg(id, 'Здарова карта 😎')
-            if msg == 'help':
+            elif msg == 'help':
                 send_msg(id, help_str)
-            if msg == 'rc':
+            elif msg == 'rc':
                 url = get_url()
                 if url == '':
                     send_msg(id, 'Ошибка: url не задан')
@@ -49,10 +50,9 @@ for event in longpoll.listen():
                       send_msg(id, f'На меро зарегалось {rc} человек')
                     except Exception as e:
                       send_msg(id, e)
-            if msg == 'gu':
+            elif msg == 'gu':
                 send_msg(id, f'Текущий url: {get_url()}')
-            split_msg = event.text.split()
-            if split_msg[0] == 'cu':
+            elif split_msg[0] == 'cu':
                 if len(split_msg) == 2:
                     change_url(split_msg[1])
                 else:
