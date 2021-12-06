@@ -2,6 +2,8 @@ import vk_api
 import requests
 from vk_api.longpoll import VkLongPoll, VkEventType
 
+import pandas as pd
+
 vk_session = vk_api.VkApi(token='af0697ce8a3851d732c3328a249ea45c7fc4dbd62cb55f9db0f86489760df89d31fbecd56a337fc6ebc58')
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
