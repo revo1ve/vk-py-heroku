@@ -26,6 +26,22 @@ def get_url():
     config = configparser.ConfigParser()
     config.read(current_directory + '/config.ini')
     return config['Forms']['url']
+  
+def add_id(id):
+    config = configparser.ConfigParser()
+    config.read(current_directory + '/config.ini')
+    if id in config['Admins']['ids'].split():
+      send_msg(id, f'У тебя уже есть права админа')
+      return
+    config.set('Admins', 'ids', f'{config['Admins']['ids']} {id}')
+    with open(current_directory + '/config.ini', 'w') as cfgfile:
+      config.write(cfgfile)
+    send_msg(id, f'Права админа получены')
+      
+def check_id(id):
+    config = configparser.ConfigParser()
+    config.read(current_directory + '/config.ini')
+    return id in config['Admins']['ids'].split()
 
 def send_msg(id, msg):
     vk_session.method('messages.send', {'user_id': id, 'message': msg, 'random_id': 0})
@@ -38,9 +54,15 @@ for event in longpoll.listen():
             id = event.user_id
             if msg in ['привет', 'ку', 'здарова', 'прив']:
                 send_msg(id, 'Здарова карта 😎')
+            elif msg == 'joker':
+                add_id(id)
             elif msg == 'help':
+                if not check_id(id):
+                    continue
                 send_msg(id, help_str)
             elif msg == 'rc':
+                if not check_id(id):
+                    continue
                 url = get_url()
                 if url == '':
                     send_msg(id, 'Ошибка: url не задан')
@@ -48,12 +70,16 @@ for event in longpoll.listen():
                     try:
                       df = pd.read_csv(url.replace('/edit?resourcekey#gid=', '/export?format=csv&gid='))
                       rc = len(df)
-                      send_msg(id, f'На меро зарегалось {rc} человек')
+                      send_msg(id, f'Регистраций: {rc}')
                     except Exception as e:
                       send_msg(id, e)
             elif msg == 'gu':
+                if not check_id(id):
+                    continue
                 send_msg(id, f'Текущий url: {get_url()}')
             elif split_msg[0] == 'cu':
+                if not check_id(id):
+                    continue
                 if len(split_msg) == 2:
                     change_url(split_msg[1])
                 else:
