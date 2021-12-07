@@ -30,10 +30,11 @@ def get_url():
 def add_id(id):
     config = configparser.ConfigParser()
     config.read(current_directory + '/config.ini')
-    if id in config['Admins']['ids'].split():
+    ids = config['Admins']['ids']
+    if id in ids.split():
       send_msg(id, f'У тебя уже есть права админа')
       return
-    config.set('Admins', 'ids', f'{config['Admins']['ids']} {id}')
+    config.set('Admins', 'ids', f'{ids} {id}')
     with open(current_directory + '/config.ini', 'w') as cfgfile:
       config.write(cfgfile)
     send_msg(id, f'Права админа получены')
