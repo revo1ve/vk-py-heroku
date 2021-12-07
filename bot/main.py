@@ -17,10 +17,12 @@ help_str = '''rc - количество регистраций на меро
               cu [url] - изменить url таблицы регистраций'''
 
 def change_url(new_url):
-    new_config = configparser.ConfigParser()
-    new_config['Forms'] = {'url': new_url}
+    config = configparser.ConfigParser()
+    config.read(current_directory + '/config.ini')
+    config.set('Forms', 'url', new_url)
     with open(current_directory + '/config.ini', 'w') as cfgfile:
-      new_config.write(cfgfile)
+      config.write(cfgfile)
+    send_msg(id, f'url изменён')
 
 def get_url():
     config = configparser.ConfigParser()
