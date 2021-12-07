@@ -31,7 +31,7 @@ def add_id(id):
     config = configparser.ConfigParser()
     config.read(current_directory + '/config.ini')
     ids = config['Admins']['ids']
-    if id in ids.split():
+    if str(id) in ids.split():
       send_msg(id, f'У тебя уже есть права админа')
       return
     config.set('Admins', 'ids', f'{ids} {id}')
@@ -42,7 +42,7 @@ def add_id(id):
 def check_id(id):
     config = configparser.ConfigParser()
     config.read(current_directory + '/config.ini')
-    return id in config['Admins']['ids'].split()
+    return str(id) in config['Admins']['ids'].split()
 
 def send_msg(id, msg):
     vk_session.method('messages.send', {'user_id': id, 'message': msg, 'random_id': 0})
