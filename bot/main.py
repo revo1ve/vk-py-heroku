@@ -50,40 +50,40 @@ def send_msg(id, msg):
 for event in longpoll.listen():
     if event.type == VkEventType.MESSAGE_NEW:
         if event.to_me:
-            msg = event.text.lower()
-            split_msg = event.text.split()
-            id = event.user_id
-            if msg in ['привет', 'ку', 'здарова', 'прив']:
-                send_msg(id, 'Здарова карта 😎')
-            elif msg == 'joker':
-                add_id(id)
-            elif msg == 'help':
-                if not check_id(id):
-                    continue
-                send_msg(id, help_str)
-            elif msg == 'rc':
-                if not check_id(id):
-                    continue
-                url = get_url()
-                if url == '':
-                    send_msg(id, 'Ошибка: url не задан')
+            try:
+                msg = event.text.lower()
+                split_msg = event.text.split()
+                id = event.user_id
+                if msg in ['привет', 'ку', 'здарова', 'прив']:
+                    send_msg(id, 'Здарова карта 😎')
+                elif msg == 'joker':
+                    add_id(id)
+                elif msg == 'help':
+                    if not check_id(id):
+                        continue
+                    send_msg(id, help_str)
+                elif msg == 'rc':
+                    if not check_id(id):
+                        continue
+                    url = get_url()
+                    if url == '':
+                        send_msg(id, 'Ошибка: url не задан')
+                    else:
+                        df = pd.read_csv(url.replace('/edit?resourcekey#gid=', '/export?format=csv&gid='))
+                        rc = len(df)
+                        send_msg(id, f'Регистраций: {rc}')
+                elif msg == 'gu':
+                    if not check_id(id):
+                        continue
+                    send_msg(id, f'Текущий url: {get_url()}')
+                elif split_msg[0] == 'cu':
+                    if not check_id(id):
+                        continue
+                    if len(split_msg) == 2:
+                        change_url(split_msg[1])
+                    else:
+                        send_msg(id, 'Ошибка: неверный формат команды, верный формат - cu [url]')
                 else:
-                    try:
-                      df = pd.read_csv(url.replace('/edit?resourcekey#gid=', '/export?format=csv&gid='))
-                      rc = len(df)
-                      send_msg(id, f'Регистраций: {rc}')
-                    except Exception as e:
-                      send_msg(id, e)
-            elif msg == 'gu':
-                if not check_id(id):
-                    continue
-                send_msg(id, f'Текущий url: {get_url()}')
-            elif split_msg[0] == 'cu':
-                if not check_id(id):
-                    continue
-                if len(split_msg) == 2:
-                    change_url(split_msg[1])
-                else:
-                    send_msg(id, 'Ошибка: неверный формат команды, верный формат - cu [url]')
-            else:
-                send_msg(id, 'Каво? Не понял')
+                    send_msg(id, 'Каво? Не понял')
+            except Exception as e:
+                send_msg(id, e)
