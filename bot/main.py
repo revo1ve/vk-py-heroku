@@ -16,6 +16,8 @@ help_str = '''rc - количество регистраций на меро
               gu - текущий url таблицы регистраций
               cu [url] - изменить url таблицы регистраций'''
 
+skip_rows = 1
+
 def change_url(new_url):
     config = configparser.ConfigParser()
     config.read(current_directory + '/config.ini')
@@ -71,13 +73,18 @@ for event in longpoll.listen():
                     if url == '':
                         send_msg(id, 'Ошибка: url не задан')
                     else:
-                        df = pd.read_csv(url.replace('/edit?resourcekey#gid=', '/export?format=csv&gid='))
+                        df = pd.read_csv(url.replace('/edit?resourcekey#gid=', '/export?format=csv&gid='), skiprows=skip_rows)
                         rc = len(df)
                         send_msg(id, f'Регистраций: {rc}')
                 elif msg == 'gu':
                     if not check_id(id):
                         continue
                     send_msg(id, f'Текущий url: {get_url()}')
+                elif split_msg[0] == 'skip':
+                    if not check_id(id):
+                        continue
+                    skip_rows = int(split_msg[1])
+                    send_msg(id, f'{skip_rows - 1} записей на меро не учтены')
                 elif split_msg[0] == 'cu':
                     if not check_id(id):
                         continue
