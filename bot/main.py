@@ -16,7 +16,7 @@ help_str = '''rc - количество регистраций на меро
               gu - текущий url таблицы регистраций
               cu [url] - изменить url таблицы регистраций'''
 
-skip_rows = 1
+skip_rows = 0
 
 def change_url(new_url):
     config = configparser.ConfigParser()
@@ -84,7 +84,7 @@ for event in longpoll.listen():
                     if not check_id(id):
                         continue
                     skip_rows = int(split_msg[1])
-                    send_msg(id, f'{skip_rows - 1} записей на меро не учтены')
+                    send_msg(id, f'{skip_rows} записей на меро не учтены')
                 elif split_msg[0] == 'cu':
                     if not check_id(id):
                         continue
